@@ -59,13 +59,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteProject(Long id) {
 
+        Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException("Not Found Project with " + id));
 
-        Optional<Task> task = taskRepository.findById(id);
-        if (task.isPresent()) {
+        boolean hasProjects = taskRepository.existsByProjectId(id);
+        if (hasProjects) {
             throw new RuntimeException("Cannot delete project if tasks belong to it ");
         }
 
-        Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException("Not Found Project with " + id));
         projectRepository.deleteById(id);
     }
 }

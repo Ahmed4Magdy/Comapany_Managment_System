@@ -3,7 +3,6 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.DepartmentDto;
 import com.example.demo.entity.Department;
-import com.example.demo.entity.Employee;
 import com.example.demo.exceptionhandling.DepartmentNotFoundException;
 import com.example.demo.mapper.DepartmentMapper;
 import com.example.demo.repository.DepartmentRepository;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,12 +55,17 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void deleteDepartment(Long id) {
 
-        Optional<Employee> employee=employeeRepository.findById(id);
-        if (employee.isPresent()){
-            throw new RuntimeException("Cannot delete department if employees belong to it ");
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new DepartmentNotFoundException("Not Found Department " + id));
+
+        boolean hasEmployees = employeeRepository.existsByDepartmentId(id);
+
+        if (hasEmployees) {
+            throw new RuntimeException("Cannot delete department if employees belong to it");
         }
 
-        departmentRepository.deleteById(id);
 
+        departmentRepository.deleteById(id);
     }
+
 }

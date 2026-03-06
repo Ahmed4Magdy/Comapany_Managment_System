@@ -29,9 +29,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final TaskRepository taskRepository;
     private final DepartmentRepository departmentRepository;
     private final EmployeeMapper employeeMapper;
-//    private final PasswordEncoder passwordEncoder;
-
-//        employee.setPassword(passwordEncoder.encode(dto.getPassword()));
 
     @Override
     public EmployeeDto addEmployee(EmployeeDto dto) {
@@ -79,13 +76,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployee(Long id) {
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Not Found Employee " + id));
 
-        Optional<Task> task = taskRepository.findById(id);
-        if (task.isPresent()) {
+        boolean hasTasks = taskRepository.existsByEmployeeId(id);
+        if (hasTasks) {
             throw new RuntimeException("can't delete employee if belong to it ");
         }
 
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Not Found Employee " + id));
         employeeRepository.deleteById(id);
 
     }

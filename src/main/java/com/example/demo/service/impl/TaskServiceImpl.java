@@ -98,6 +98,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDto> getAllTasksWithProjectId(Long projectId) {
-        return taskRepository.findByEmployeeId(projectId).stream().map(taskMapper::toDto).collect(Collectors.toList());
+        return taskRepository.findByProjectId(projectId).stream().map(taskMapper::toDto).collect(Collectors.toList());
     }
 }
