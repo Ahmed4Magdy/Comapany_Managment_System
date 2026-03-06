@@ -12,12 +12,12 @@ public interface EmployeeService {
 
     List<EmployeeDto> getAllEmployees();
 
-    EmployeeDto updateEmployee(Long id,EmployeeDto dto);
+    EmployeeDto updateEmployee(Long id, EmployeeDto dto);
 
     void deleteEmployee(Long id);
 
-
     List<EmployeeDto> getAllActiveTrueEmployees();
+
     List<EmployeeDto> getAllActiveFalseEmployees();
 
 
