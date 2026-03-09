@@ -39,17 +39,17 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDto> updateProject(@PathVariable Long id,@Valid @RequestBody ProjectDto dto) {
+    public ResponseEntity<ProjectDto> updateProject(@PathVariable Long id, @Valid @RequestBody ProjectDto dto) {
 
-        return ResponseEntity.ok(projectService.updateProject(id,dto));
+        return ResponseEntity.ok(projectService.updateProject(id, dto));
 
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProject(@PathVariable Long id) {
-
-           return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        projectService.deleteProject(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
 

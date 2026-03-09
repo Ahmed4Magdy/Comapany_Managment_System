@@ -3,9 +3,9 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.EmployeeDto;
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Employee;
-import com.example.demo.entity.Task;
 import com.example.demo.exceptionhandling.DepartmentNotFoundException;
 import com.example.demo.exceptionhandling.DuplicateEmailException;
+import com.example.demo.exceptionhandling.EmployeeHasTasksException;
 import com.example.demo.exceptionhandling.EmployeeNotFoundException;
 import com.example.demo.mapper.EmployeeMapper;
 import com.example.demo.repository.DepartmentRepository;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,7 +79,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         boolean hasTasks = taskRepository.existsByEmployeeId(id);
         if (hasTasks) {
-            throw new RuntimeException("can't delete employee if belong to it ");
+            throw new EmployeeHasTasksException("can't delete employee if belong to it ");
         }
 
         employeeRepository.deleteById(id);

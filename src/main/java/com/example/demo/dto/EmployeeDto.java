@@ -38,7 +38,7 @@ public class EmployeeDto {
     private String position;
 
     private boolean active = true;
-
+    @NotNull(message = "role is required")
     private Employee.Role role;
 
     private LocalDate hireDate;

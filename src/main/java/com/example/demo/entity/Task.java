@@ -22,7 +22,7 @@ public class Task {
     private String title;
 
     private String description;
-
+    @Column(nullable = false)
     private LocalDate deadline;
 
     @Enumerated(EnumType.STRING)

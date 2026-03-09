@@ -6,6 +6,7 @@ import com.example.demo.entity.Project;
 import com.example.demo.entity.Task;
 import com.example.demo.exceptionhandling.EmployeeNotFoundException;
 import com.example.demo.exceptionhandling.ProjectNotFoundException;
+import com.example.demo.exceptionhandling.TaskNoStoreInActiveEmployeeException;
 import com.example.demo.exceptionhandling.TaskNotFoundException;
 import com.example.demo.mapper.TaskMapper;
 import com.example.demo.repository.EmployeeRepository;
@@ -33,7 +34,7 @@ public class TaskServiceImpl implements TaskService {
 
         Employee existing = employeeRepository.findById(dto.getEmployeeId()).orElseThrow(() -> new EmployeeNotFoundException("Not Found Employee " + dto.getEmployeeId()));
         if (!existing.isActive()) {
-            throw new RuntimeException("can't create task have inactive employee ");
+            throw new TaskNoStoreInActiveEmployeeException("can't create task have inactive employee ");
         }
         Project project = projectRepository.findById(dto.getProjectId()).orElseThrow(() -> new ProjectNotFoundException("Not Found Project " + dto.getProjectId()));
 
@@ -66,12 +67,17 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto updateTasks(Long id, TaskDto dto) {
 
         Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Not Found task " + id));
-        Project project = projectRepository.findById(dto.getProjectId()).orElseThrow(() -> new ProjectNotFoundException("Not Found Project with " + dto.getProjectId()));
-        Employee employee = employeeRepository.findById(dto.getEmployeeId()).orElseThrow(() -> new EmployeeNotFoundException("Not Found Employee " + dto.getEmployeeId()));
+        if (dto.getProjectId() != null) {
+            Project project = projectRepository.findById(dto.getProjectId()).orElseThrow(() -> new ProjectNotFoundException("Not Found Project with " + dto.getProjectId()));
+            task.setProject(project);
 
+        }
+        if (dto.getEmployeeId() != null) {
+            Employee employee = employeeRepository.findById(dto.getEmployeeId()).orElseThrow(() -> new EmployeeNotFoundException("Not Found Employee " + dto.getEmployeeId()));
+            task.setEmployee(employee);
+
+        }
         taskMapper.updateTaskFromdto(dto, task);
-        task.setEmployee(employee);
-        task.setProject(project);
 
         Task saved = taskRepository.save(task);
 
@@ -91,7 +97,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDto> getAllTasksWithEmployeeId(Long employeeId) {
 
 
-         return taskRepository.findByEmployeeId(employeeId).stream().map(taskMapper::toDto).collect(Collectors.toList());
+        return taskRepository.findByEmployeeId(employeeId).stream().map(taskMapper::toDto).collect(Collectors.toList());
 
 
     }

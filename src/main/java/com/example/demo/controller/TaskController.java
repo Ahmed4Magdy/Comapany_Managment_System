@@ -1,12 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.TaskDto;
-import com.example.demo.entity.Employee;
-import com.example.demo.entity.Project;
-import com.example.demo.entity.Task;
-import com.example.demo.exceptionhandling.EmployeeNotFoundException;
-import com.example.demo.exceptionhandling.ProjectNotFoundException;
-import com.example.demo.exceptionhandling.TaskNotFoundException;
 import com.example.demo.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/task")
@@ -69,9 +62,10 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable Long id) {
+    public ResponseEntity<?> deleteTask(@PathVariable Long id) {
 
         taskService.deleteTask(id);
+       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 

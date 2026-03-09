@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+
+    <employees id="1"
+               full_name="AhmedYassin"
+               email="ahmed@gmail.com"
+               password="ahmed@11"
+               active="true"
+               department_id="1"
+               position="java developer"
+               role="EMPLOYEE"
+             />
+
+    <employees id="2"
+               full_name="Hassan nour"
+               email="Hassan@gmail.com"
+               password="shams@11"
+               active="True"
+               department_id="1"
+               position="java developer"
+               role="EMPLOYEE"
+               />
+
+</dataset>

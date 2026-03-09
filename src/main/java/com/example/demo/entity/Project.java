@@ -34,9 +34,11 @@ public class Project {
     private String description;
 
     @NotNull(message = "Start date is required")
+    @Column(name ="start_date")
     private LocalDate startDate;
 
     @NotNull(message = "end date is required")
+    @Column(name = "end_date")
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)

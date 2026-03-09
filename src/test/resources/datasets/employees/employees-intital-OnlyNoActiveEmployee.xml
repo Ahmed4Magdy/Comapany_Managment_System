@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <departments
+            id="1"
+            name="IT"
+    />
+    <employees id="1"
+               full_name="AhmedYassin"
+               email="ahmed@gmail.com"
+               password="ahmed@11"
+               active="false"
+               department_id="1"
+               position="java developer"
+               role="EMPLOYEE"
+               hire_date="2026-03-08"/>
+
+    <employees id="2"
+               full_name="AhmedAli"
+               email="shams@gmail.com"
+               password="shams@11"
+               active="false"
+               department_id="1"
+               position="java developer"
+               role="EMPLOYEE"
+               hire_date="2026-03-08"/>
+
+</dataset>

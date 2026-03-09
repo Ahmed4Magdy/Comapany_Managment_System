@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-    <employees id="1" full_name="AhmedYassin" email="ahmed@gmail.com" active="1" department_id="1"/>
-    <employees id="2" full_name="AhmedAli" email="shams@gmail.com" active="0" department_id="2"/>
-
-</dataset>

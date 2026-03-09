@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.ProjectDto;
 import com.example.demo.entity.Project;
 import com.example.demo.entity.Task;
+import com.example.demo.exceptionhandling.ProjectHasTasksException;
 import com.example.demo.exceptionhandling.ProjectNotFoundException;
 import com.example.demo.mapper.ProjectMapper;
 import com.example.demo.repository.ProjectRepository;
@@ -59,10 +60,10 @@ public class ProjectServiceImpl implements ProjectService {
     public void deleteProject(Long id) {
 
         Project project = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException("Not Found Project with " + id));
-
+        //exist tasks with projectId
         boolean hasProjects = taskRepository.existsByProjectId(id);
         if (hasProjects) {
-            throw new RuntimeException("Cannot delete project if tasks belong to it ");
+            throw new ProjectHasTasksException("Cannot delete project if tasks belong to it ");
         }
 
         projectRepository.deleteById(id);

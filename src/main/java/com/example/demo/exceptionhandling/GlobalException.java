@@ -51,6 +51,19 @@ public class GlobalException {
     }
 
 
+    @ExceptionHandler(EmployeeHasTasksException.class)
+    public ResponseEntity<ErrorResponse> handlePatientNotFound(EmployeeHasTasksException ex, WebRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .path(request.getDescription(false))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+
     @ExceptionHandler(DepartmentNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePatientNotFound(DepartmentNotFoundException ex, WebRequest request) {
         ErrorResponse error = ErrorResponse.builder()
@@ -62,6 +75,19 @@ public class GlobalException {
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(DepartmentHasEmployeesException.class)
+    public ResponseEntity<ErrorResponse> handlePatientNotFound(DepartmentHasEmployeesException ex, WebRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .path(request.getDescription(false))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
 
 
     @ExceptionHandler(ProjectNotFoundException.class)
@@ -77,6 +103,18 @@ public class GlobalException {
     }
 
 
+    @ExceptionHandler(ProjectHasTasksException.class)
+    public ResponseEntity<ErrorResponse> handlePatientNotFound(ProjectHasTasksException ex, WebRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .path(request.getDescription(false))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(TaskNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePatientNotFound(TaskNotFoundException ex, WebRequest request) {
 
@@ -89,6 +127,19 @@ public class GlobalException {
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 
+    }
+
+
+    @ExceptionHandler(TaskNoStoreInActiveEmployeeException.class)
+    public ResponseEntity<ErrorResponse> handlePatientNotFound(TaskNoStoreInActiveEmployeeException ex, WebRequest request) {
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .path(request.getDescription(false))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
         @ExceptionHandler(DuplicateEmailException.class)
         public ResponseEntity<ErrorResponse> handleDuplicatePatient (DuplicateEmailException ex, WebRequest request){

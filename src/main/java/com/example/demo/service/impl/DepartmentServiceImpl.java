@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.DepartmentDto;
 import com.example.demo.entity.Department;
+import com.example.demo.exceptionhandling.DepartmentHasEmployeesException;
 import com.example.demo.exceptionhandling.DepartmentNotFoundException;
 import com.example.demo.mapper.DepartmentMapper;
 import com.example.demo.repository.DepartmentRepository;
@@ -61,7 +62,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         boolean hasEmployees = employeeRepository.existsByDepartmentId(id);
 
         if (hasEmployees) {
-            throw new RuntimeException("Cannot delete department if employees belong to it");
+            throw new DepartmentHasEmployeesException("Cannot delete department if employees belong to it");
         }
 
 

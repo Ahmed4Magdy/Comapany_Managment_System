@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+    <departments id="1" name="HR"/>
+
+    <employees id="1"
+               full_name="AhmedYassin"
+               email="ahmed@gmail.com"
+               password="ahmed@11"
+               active="true"
+               department_id="1"
+               position="java developer"
+               role="EMPLOYEE"
+               hire_date="2026-03-08"/>
+
+
+    <projects id="1"
+              name="Web design"
+              start_date="2026-03-08"
+              end_date="2026-03-15"/>
+
+
+
+
+
+    <tasks id="1"
+              title="Web design"
+              deadline="2026-03-20"
+              description="Design web"
+              employee_id="1"
+              project_id="1"/>
+
+    <tasks id="2"
+              title="Backend Setup"
+              deadline="2026-03-20"
+              description="Design logic"
+              employee_id="1"
+              project_id="1"/>
+
+</dataset>
