@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.EmployeeDto;
 
 import java.util.List;
@@ -7,6 +9,8 @@ import java.util.List;
 public interface EmployeeService {
 
     EmployeeDto addEmployee(EmployeeDto dto);
+
+    AuthResponse login(AuthRequest authRequest);
 
     EmployeeDto getEmployeeWithId(Long id);
 

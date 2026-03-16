@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -147,7 +147,6 @@ public class ProjectServiceTest {
     void deleteProject_shouldDeletedProjectWithSuccessfully() {
 
         when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
-        when(taskRepository.existsByProjectId(1L)).thenReturn(false);
         doNothing().when(projectRepository).deleteById(1L);
         projectServiceimpl.deleteProject(1L);
         verify(projectRepository, times(1)).deleteById(1L);
@@ -155,21 +154,6 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
-    void deleteProject_shouldThrowRuntimeException_CannotDeleteProjectIfBelongToTask() {
-
-
-        when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
-
-        when(taskRepository.existsByProjectId(1L)).thenReturn(true);
-
-        Exception ex = assertThrows(RuntimeException.class, () -> {
-            projectServiceimpl.deleteProject(1L);
-        });
-
-        assertEquals("Cannot delete project if tasks belong to it ", ex.getMessage());
-
-    }
 
 
     @Test

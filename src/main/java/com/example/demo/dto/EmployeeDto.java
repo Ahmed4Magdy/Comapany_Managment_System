@@ -1,8 +1,9 @@
 package com.example.demo.dto;
 
 
-import com.example.demo.entity.Employee;
-import jakarta.persistence.Column;
+
+import com.example.demo.entity.Role;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,8 +21,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class EmployeeDto {
 
-    @NotNull(message = "Department ID is required")
+    private Long id;
+
     private Long departmentId;
+
+    private String departmentName;
 
     @NotBlank(message = "Full name is required")
     private String fullName;
@@ -38,12 +42,12 @@ public class EmployeeDto {
     private String position;
 
     private boolean active = true;
-    @NotNull(message = "role is required")
-    private Employee.Role role;
 
     private LocalDate hireDate;
 
-
+    @JsonProperty("employee_role")
+    @NotNull
+    private Role role;
 
 
 }

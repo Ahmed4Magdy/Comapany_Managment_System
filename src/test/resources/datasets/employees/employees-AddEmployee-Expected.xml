@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <employees id="1" full_name="AhmedYassin" email="ahmed@gmail.com"  password="ahmed@11" active="1" department_id="1"  position="java developer" role="EMPLOYEE" />
-    <employees id="2" full_name="AhmedAli" email="shams@gmail.com"  password="shams@11" active="0" department_id="1"  position="java developer" role="EMPLOYEE" />
-    <employees id="3" full_name="NourAhmed" email="Lamis@gmail.com"  password="Lamis@22" active="1" department_id="1"  position="java developer" role="EMPLOYEE"/>
+    <employees id="1" full_name="AhmedYassin" email="ahmed@gmail.com"  password="ahmed@11" active="1" department_id="1"  position="java developer" employee_role="ROLE_EMPLOYEE" />
+    <employees id="2" full_name="AhmedAli" email="shams@gmail.com"  password="shams@11" active="0" department_id="1"  position="java developer" employee_role="ROLE_EMPLOYEE" />
+    <employees id="3" full_name="NourAhmed" email="Lamis@gmail.com"  password="Lamis@22" active="1" department_id="1"  position="java developer" employee_role="ROLE_EMPLOYEE"/>
 
 </dataset>

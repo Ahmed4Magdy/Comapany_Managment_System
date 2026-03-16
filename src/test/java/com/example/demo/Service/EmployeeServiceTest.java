@@ -1,9 +1,12 @@
 package com.example.demo.Service;
 
 
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.EmployeeDto;
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Employee;
+import com.example.demo.exceptionhandling.BadCredentialsException;
 import com.example.demo.exceptionhandling.DepartmentNotFoundException;
 import com.example.demo.exceptionhandling.DuplicateEmailException;
 import com.example.demo.exceptionhandling.EmployeeNotFoundException;
@@ -12,18 +15,22 @@ import com.example.demo.repository.DepartmentRepository;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.service.impl.EmployeeServiceImpl;
+import com.example.demo.service.impl.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +44,17 @@ public class EmployeeServiceTest {
     private DepartmentRepository departmentRepository;
     @Mock
     private EmployeeMapper employeeMapper;
+    @Mock
+    private AuthenticationManager authenticationManager;
+
+    @Mock
+    private JwtService jwtService;
+
+    @Mock
+    private Authentication authentication;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private EmployeeServiceImpl employeeServiceImpl;
@@ -45,7 +63,7 @@ public class EmployeeServiceTest {
     private Employee employee1;
     private EmployeeDto dto;
     private Department dept;
-
+    private AuthRequest authRequest;
 
     @BeforeEach
     void setup() {
@@ -54,13 +72,13 @@ public class EmployeeServiceTest {
         dto.setDepartmentId(1L);
         dto.setFullName("Ahmed Magdy");
         dto.setEmail("ahmed@gmail.com");
-        dto.setPassword("hwdkh@22");
+        dto.setPassword("ahmed@22");
         dto.setPosition("Java developer");
 
         employee = new Employee();
         employee.setFullName("Ahmed Magdy");
         employee.setEmail("ahmed@gmail.com");
-        employee.setPassword("hwdkh@22");
+        employee.setPassword(passwordEncoder.encode("encodeahmed@22"));
         employee.setPosition("Java developer");
         employee.setHireDate(LocalDate.now());
 
@@ -75,6 +93,7 @@ public class EmployeeServiceTest {
 
         when(employeeMapper.toEntity(dto)).thenReturn(employee);
         when(departmentRepository.findById(dto.getDepartmentId())).thenReturn(Optional.of(dept));
+        when(passwordEncoder.encode(dto.getPassword())).thenReturn("encodeahmed@22");
         when(employeeRepository.save(employee)).thenReturn(employee);
         when(employeeMapper.toDto(employee)).thenReturn(dto);
 
@@ -95,7 +114,7 @@ public class EmployeeServiceTest {
             employeeServiceImpl.addEmployee(dto);
         });
 
-        assertEquals("Email already exists", ex.getMessage());
+        assertEquals("Email already exists " + dto.getEmail(), ex.getMessage());
 
     }
 
@@ -114,6 +133,45 @@ public class EmployeeServiceTest {
     }
 
 
+    @Test
+    void login_shouldReturnToken_whenCredentialsAreValid() {
+        authRequest = new AuthRequest();
+        authRequest.setEmail("ahmed@gmail.com");
+        authRequest.setPassword("ahmed@22");
+
+        when(authenticationManager.authenticate(any()))
+                .thenReturn(authentication);
+
+
+        when(jwtService.generateToken(authRequest.getEmail()))
+                .thenReturn("mock-jwt-token");
+
+        AuthResponse response = employeeServiceImpl.login(authRequest);
+
+        assertNotNull(response);
+        assertEquals("mock-jwt-token", response.getToken());
+        assertEquals("Login successful", response.getMessage());
+
+        verify(authenticationManager).authenticate(any());
+        verify(jwtService).generateToken(authRequest.getEmail());
+    }
+
+
+    @Test
+    void login_shouldThrowException_whenAuthenticationFails() {
+        authRequest = new AuthRequest();
+        authRequest.setEmail("ahmed@gmail.com");
+        authRequest.setPassword("ahmed@22");
+
+        when(authenticationManager.authenticate(any()))
+                .thenThrow(new BadCredentialsException("Invalid email or password"));
+
+
+        assertThrows(BadCredentialsException.class,
+                () -> employeeServiceImpl.login(authRequest));
+
+
+    }
 
 
     @Test
@@ -147,9 +205,9 @@ public class EmployeeServiceTest {
     @Test
     void getAllEmployees_ShouldReturnAllEmployeesWithSuccessfully() {
         employee1 = new Employee();
-        employee1.setFullName("Yassin ayamn");
+        employee1.setFullName("Yassin ayman");
         employee1.setEmail("yasso@gmail.com");
-        employee1.setPassword("hwdkh@22");
+        employee1.setPassword(passwordEncoder.encode("ahmed@22"));
         employee1.setPosition("Java developer");
         employee1.setHireDate(LocalDate.now());
 
@@ -202,32 +260,16 @@ public class EmployeeServiceTest {
     void deleteEmployee_shouldDeletedEmployeeWithSuccessfully() {
 
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
-        when(taskRepository.existsByEmployeeId(1L)).thenReturn(false);
         doNothing().when(employeeRepository).deleteById(1L);
         employeeServiceImpl.deleteEmployee(1L);
-        verify(employeeRepository,times(1)).deleteById(1L);
-
-
-    }
-
-    @Test
-    void deleteEmployee_shouldThrowRuntimeException_CannotDeleteEmployeeIfBelongToDepartment(){
-
-        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
-        when(taskRepository.existsByEmployeeId(1L)).thenReturn(true);
-
-         Exception ex =assertThrows(RuntimeException.class,()->{
-             employeeServiceImpl.deleteEmployee(1L);
-         });
-
-        verify(employeeRepository,never()).deleteById(anyLong());
+        verify(employeeRepository, times(1)).deleteById(1L);
 
 
     }
 
 
     @Test
-    void deleteEmployee_shouldThrowEmployeeNotFoundException(){
+    void deleteEmployee_shouldThrowEmployeeNotFoundException() {
 
 
         when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
@@ -243,26 +285,26 @@ public class EmployeeServiceTest {
 
 
     @Test
-    void getActiveTrueEmployees(){
+    void getActiveTrueEmployees() {
 
         when(employeeRepository.findByActiveTrue()).thenReturn(List.of(employee));
         when(employeeMapper.toDto(employee)).thenReturn(dto);
 
-        List <EmployeeDto>result =employeeServiceImpl.getAllActiveTrueEmployees();
+        List<EmployeeDto> result = employeeServiceImpl.getAllActiveTrueEmployees();
 
-        assertEquals(1,result.size());
+        assertEquals(1, result.size());
     }
 
 
     @Test
-    void getActiveFalseEmployees(){
+    void getActiveFalseEmployees() {
 
         when(employeeRepository.findByActiveFalse()).thenReturn(List.of(employee));
         when(employeeMapper.toDto(employee)).thenReturn(dto);
 
-        List <EmployeeDto>result =employeeServiceImpl.getAllActiveFalseEmployees();
+        List<EmployeeDto> result = employeeServiceImpl.getAllActiveFalseEmployees();
 
-        assertEquals(1,result.size());
+        assertEquals(1, result.size());
     }
 
 

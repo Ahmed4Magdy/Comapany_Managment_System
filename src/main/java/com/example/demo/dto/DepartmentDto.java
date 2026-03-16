@@ -13,11 +13,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DepartmentDto {
 
+    private long id;
 
     @NotBlank(message = "Department name is required")
     private String name;
 
     private String description;
+
 
 
 

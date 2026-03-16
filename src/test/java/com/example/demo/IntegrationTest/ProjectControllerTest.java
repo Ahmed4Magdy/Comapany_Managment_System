@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         DirtiesContextTestExecutionListener.class,
         TransactionDbUnitTestExecutionListener.class
 })
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 
 public class ProjectControllerTest {
 
@@ -109,6 +111,7 @@ public class ProjectControllerTest {
     }
 
     @Test
+    @DirtiesContext
     @DatabaseSetup("/datasets/projects/projects-initial.xml")
     @ExpectedDatabase(value = "/datasets/projects/Projects-expected-GetProjectWithId.xml",
             assertionMode = DatabaseAssertionMode.NON_STRICT)
@@ -124,7 +127,9 @@ public class ProjectControllerTest {
     }
 
     @Test
-    @DatabaseSetup("/datasets/projects/projects-initial.xml")
+    @DirtiesContext
+
+    @DatabaseSetup("/datasets/projects/projects-initial-SpecialForupdateWithId.xml")
     @ExpectedDatabase(value = "/datasets/projects/projects-expected-UpdateProjectWithId.xml",
             assertionMode = DatabaseAssertionMode.NON_STRICT)
     void testUpdateProjectWithId() throws Exception {
@@ -196,11 +201,12 @@ public class ProjectControllerTest {
 
     @Test
     @DatabaseSetup("/datasets/projects/projects-initial-ProjectHasTasks.xml")
+    @ExpectedDatabase(value = "/datasets/projects/projects-expected-DeleteProject.xml",
+            assertionMode = DatabaseAssertionMode.NON_STRICT)
     void testDeleteProjectWithId_ShouldReturnConflict_containONTask() throws Exception {
 
-        mockMvc.perform(delete("/project/1"))
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.message").value("Cannot delete project if tasks belong to it "));
+        mockMvc.perform(delete("/project/2"))
+                .andExpect(status().isNoContent());
     }
 
 

@@ -37,7 +37,7 @@ public class Employee {
     private boolean active = true;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "employee_role", nullable = false)
     private Role role;
 
     @ManyToOne
@@ -50,13 +50,7 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private List<Task> employeeTasks;
 
-    public enum Role {
 
-        HR,
-        MANAGER,
-        EMPLOYEE
-
-    }
 
 
 }

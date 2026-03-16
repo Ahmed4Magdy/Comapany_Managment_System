@@ -1,0 +1,45 @@
+<dataset>
+
+    <tasks id="1"
+           title="Web design"
+           deadline="2026-03-20"
+           description="Design web"
+           employee_id="1"
+           project_id="2"/>
+
+
+    <projects id="1"
+              name="Web design"
+              start_date="2026-03-08"
+              end_date="2026-03-15"/>
+
+    <projects id="2"
+              name="Backend Setup"
+              start_date="2026-03-09"
+              end_date="2026-03-15"/>
+
+    <departments
+            id="1"
+            name="IT"
+    />
+
+
+    <employees id="1"
+               full_name="NourAhmed"
+               email="Lamis@gmail.com"
+               password="Lamis@22"
+               active="1"
+               department_id="1"
+               position="java developer"
+               employee_role="ROLE_EMPLOYEE"
+               hire_date ="2026-03-8"/>
+
+
+
+
+
+
+
+
+
+</dataset>

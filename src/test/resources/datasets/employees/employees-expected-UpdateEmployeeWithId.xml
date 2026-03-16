@@ -9,7 +9,7 @@
                active="true"
                department_id="1"
                position="java developer"
-               role="EMPLOYEE"
+               employee_role="ROLE_EMPLOYEE"
              />
 
     <employees id="2"
@@ -19,7 +19,7 @@
                active="True"
                department_id="1"
                position="java developer"
-               role="EMPLOYEE"
+               employee_role="ROLE_EMPLOYEE"
                />
 
 </dataset>

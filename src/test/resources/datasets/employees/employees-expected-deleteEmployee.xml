@@ -9,7 +9,7 @@
                active="true"
                department_id="1"
                position="java developer"
-               role="EMPLOYEE"
+               employee_role="ROLE_EMPLOYEE"
                hire_date="2026-03-08"/>
 
 

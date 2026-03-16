@@ -3,8 +3,15 @@
     <departments id="1" name="HR"/>
 
 
-
-
+    <employees id="1"
+               full_name="AhmedYassin"
+               email="ahmed@gmail.com"
+               password="ahmed@11"
+               active="true"
+               department_id="1"
+               position="java developer"
+               employee_role="ROLE_EMPLOYEE"
+               hire_date="2026-03-08"/>
 
 
 

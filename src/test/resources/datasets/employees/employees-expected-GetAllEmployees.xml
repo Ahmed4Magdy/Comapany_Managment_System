@@ -9,7 +9,7 @@
                active="1"
                department_id="1"
                position="java developer"
-               role="EMPLOYEE"
+               employee_role="ROLE_EMPLOYEE"
                hire_date="2026-03-08"/>
 
     <employees id="2"
@@ -19,7 +19,7 @@
                active="0"
                department_id="1"
                position="java developer"
-               role="EMPLOYEE"
+               employee_role="ROLE_EMPLOYEE"
                hire_date="2026-03-08"/>
 
 </dataset>

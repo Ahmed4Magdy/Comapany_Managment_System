@@ -5,8 +5,10 @@ CREATE TABLE employees (
     password VARCHAR(255) NOT NULL,
     position VARCHAR(100) NOT NULL,
     active BOOLEAN DEFAULT TRUE,
-    role VARCHAR(50) NOT NULL,
+     employee_role VARCHAR(50) NOT NULL,
     department_id BIGINT,
     hire_date DATE,
-    CONSTRAINT fk_employee_department FOREIGN KEY (department_id) REFERENCES departments(id)
+    CONSTRAINT fk_employee_department
+    FOREIGN KEY (department_id)
+    REFERENCES departments(id)
 );
