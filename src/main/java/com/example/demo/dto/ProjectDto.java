@@ -17,6 +17,8 @@ import java.time.LocalDate;
 @Setter
 public class ProjectDto {
 
+    private Long id;
+
     @NotBlank(message = "Project name is required")
     private String name;
 

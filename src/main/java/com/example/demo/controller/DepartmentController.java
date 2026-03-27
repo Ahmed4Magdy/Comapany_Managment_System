@@ -36,6 +36,7 @@ public class DepartmentController {
     }
 
     @GetMapping("")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_HR')")
     public ResponseEntity<List<DepartmentDto>> getAllDepartments() {
         return ResponseEntity.ok(departmentService.getAllDepartments());
     }

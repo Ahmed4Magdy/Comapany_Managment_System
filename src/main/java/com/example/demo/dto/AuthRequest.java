@@ -15,7 +15,7 @@ import lombok.Setter;
 public class AuthRequest {
 
     @NotBlank(message = "Email is required")
-    @Email(message = "Email should be valid")
+    @Email(message = "Please enter a valid email")
     private String email;
     @Size(min = 6, message = "Password must be at least 6 characters")
     @NotBlank(message = "Password is required")

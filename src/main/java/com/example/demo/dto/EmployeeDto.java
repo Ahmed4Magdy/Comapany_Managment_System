@@ -4,10 +4,7 @@ package com.example.demo.dto;
 
 import com.example.demo.entity.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,15 +20,17 @@ public class EmployeeDto {
 
     private Long id;
 
+    @NotNull(message = "Department ID is required")
+    @Positive(message = "Department ID must be greater than 0")
     private Long departmentId;
 
     private String departmentName;
 
-    @NotBlank(message = "Full name is required")
+    @NotBlank(message = "Full name is required.")
     private String fullName;
 
     @NotBlank(message = "Email is required")
-    @Email(message = "Email should be valid")
+    @Email(message = "Email should be valid.")
     private String email;
 
     @NotBlank(message = "Password is required")

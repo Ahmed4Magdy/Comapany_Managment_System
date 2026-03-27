@@ -13,7 +13,7 @@ public interface EmployeeMapper {
 
 
     @Mapping(target = "department", ignore = true)
-    @Mapping(target = "id", ignore = true)
+//    @Mapping(target = "id", ignore = true)
     Employee toEntity(EmployeeDto dto);
 
 

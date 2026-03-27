@@ -93,7 +93,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Not Found Employee " + id));
         Department department = departmentRepository.findById(dto.getDepartmentId()).orElseThrow(() -> new DepartmentNotFoundException("Not Found Department " + dto.getDepartmentId()));
         employeeMapper.updateEmployeeFromDto(dto, employee);
-        employee.setPassword(passwordEncoder.encode(dto.getPassword()));
         employee.setDepartment(department);
         employee.setHireDate(LocalDate.now());
         Employee updated = employeeRepository.save(employee);

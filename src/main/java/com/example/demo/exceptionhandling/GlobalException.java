@@ -37,151 +37,51 @@ public class GlobalException {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentials(
-            BadCredentialsException ex, HttpServletRequest request) {
 
-        ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .message("Invalid email or password")
-                .path(request.getRequestURI())
-                .build();
-
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
-    }
-
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleAccessDenied(
-            AccessDeniedException ex, HttpServletRequest request) {
-
-        ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.FORBIDDEN.value())
-                .message("Access denied: you don't have permission")
-                .path(request.getRequestURI())
-                .build();
-
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
-    }
-
-
-    @ExceptionHandler(EmployeeNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePatientNotFound(EmployeeNotFoundException ex, WebRequest request) {
-
+    @ExceptionHandler({
+            EmployeeNotFoundException.class,
+            DepartmentNotFoundException.class,
+            ProjectNotFoundException.class,
+            TaskNotFoundException.class
+    })
+    public ResponseEntity<ErrorResponse> handleNotFound(RuntimeException ex, WebRequest request) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
                 .message(ex.getMessage())
                 .path(request.getDescription(false))
                 .build();
-
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
 
-    @ExceptionHandler(EmployeeHasTasksException.class)
-    public ResponseEntity<ErrorResponse> handlePatientNotFound(EmployeeHasTasksException ex, WebRequest request) {
+    @ExceptionHandler({
+            EmployeeHasTasksException.class,
+            DepartmentHasEmployeesException.class,
+            ProjectHasTasksException.class,
+            TaskNoStoreInActiveEmployeeException.class,
+            DuplicateEmailException.class
+    })
+    public ResponseEntity<ErrorResponse> handleConflict(RuntimeException ex, WebRequest request) {
         ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
                 .message(ex.getMessage())
                 .path(request.getDescription(false))
                 .build();
-
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
-
-
-    @ExceptionHandler(DepartmentNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePatientNotFound(DepartmentNotFoundException ex, WebRequest request) {
-        ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .message(ex.getMessage())
-                .path(request.getDescription(false))
-                .build();
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(DepartmentHasEmployeesException.class)
-    public ResponseEntity<ErrorResponse> handlePatientNotFound(DepartmentHasEmployeesException ex, WebRequest request) {
-        ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.CONFLICT.value())
-                .message(ex.getMessage())
-                .path(request.getDescription(false))
-                .build();
-
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
-
-
-
-    @ExceptionHandler(ProjectNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePatientNotFound(ProjectNotFoundException ex, WebRequest request) {
-        ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .message(ex.getMessage())
-                .path(request.getDescription(false))
-                .build();
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-
-    @ExceptionHandler(ProjectHasTasksException.class)
-    public ResponseEntity<ErrorResponse> handlePatientNotFound(ProjectHasTasksException ex, WebRequest request) {
-        ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.CONFLICT.value())
-                .message(ex.getMessage())
-                .path(request.getDescription(false))
-                .build();
-
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler(TaskNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePatientNotFound(TaskNotFoundException ex, WebRequest request) {
-
-        ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .message(ex.getMessage())
-                .path(request.getDescription(false))
-                .build();
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-
-    }
-
-
-    @ExceptionHandler(TaskNoStoreInActiveEmployeeException.class)
-    public ResponseEntity<ErrorResponse> handlePatientNotFound(TaskNoStoreInActiveEmployeeException ex, WebRequest request) {
-        ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.CONFLICT.value())
-                .message(ex.getMessage())
-                .path(request.getDescription(false))
-                .build();
-
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
-        @ExceptionHandler(DuplicateEmailException.class)
-        public ResponseEntity<ErrorResponse> handleDuplicatePatient (DuplicateEmailException ex, WebRequest request){
-            ErrorResponse error = ErrorResponse.builder()
-                    .timestamp(LocalDateTime.now())
-                    .status(HttpStatus.CONFLICT.value())
-                    .message(ex.getMessage())
-                    .path(request.getDescription(false))
-                    .build();
-
-            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-        }
+//
+//    @ExceptionHandler(RuntimeException.class)
+//    public ResponseEntity<ErrorResponse> handleRuntime(RuntimeException ex, WebRequest request) {
+//        ErrorResponse error = ErrorResponse.builder()
+//                .timestamp(LocalDateTime.now())
+//                .status(HttpStatus.UNAUTHORIZED.value())
+//                .message(ex.getMessage())
+//                .path(request.getDescription(false))
+//                .build();
+//        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+//    }
 
 
     }

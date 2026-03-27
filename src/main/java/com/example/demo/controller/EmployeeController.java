@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.EmployeeDto;
+import com.example.demo.entity.Employee;
+import com.example.demo.entity.Role;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.service.impl.JwtService;
 import jakarta.validation.Valid;
@@ -11,8 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -26,36 +34,25 @@ public class EmployeeController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
-//        try {
-//            // 1. Authenticate email + password
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            request.getEmail(),
-//                            request.getPassword()
-//                    )
-//            );
-//
-//            // 2. If authenticated → generate JWT
-//            if (authentication.isAuthenticated()) {
-//                String token = jwtService.generateToken(request.getEmail());
-//                return ResponseEntity.ok(new AuthResponse(token, "Login successful"));
-//            }
-//
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                    .body("Authentication failed");
-//
-//        } catch (BadCredentialsException e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                    .body("Invalid email or password");
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("An error occurred during login");
-//        }
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authRequest.getEmail(),
+                            authRequest.getPassword()
+                    )
+            );
 
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String token = jwtService.generateToken(authRequest.getEmail());
 
-        return ResponseEntity.ok(employeeService.login(request));
+            return ResponseEntity.ok(new AuthResponse(token, "Login successful"));
 
+        } catch (BadCredentialsException | UsernameNotFoundException e) {
+            // هنا هندل الاستثناء مباشرة ونرجع 401
+            AuthResponse error = new AuthResponse(null, "Invalid email or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+        }
     }
 
     @PostMapping("/addEmployee")
@@ -118,5 +115,9 @@ public class EmployeeController {
 
     // todo : add new endpoint to get all employees roles
 
-
+    @GetMapping("/roles")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public List<Role> getAllRoles() {
+        return Arrays.asList(Role.values());
+    }
 }

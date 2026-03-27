@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ProjectDto;
+import com.example.demo.entity.Project;
+import com.example.demo.entity.Role;
 import com.example.demo.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -57,6 +60,12 @@ public class ProjectController {
         projectService.deleteProject(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
+    }
+
+    @GetMapping("/AllStatus")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public List<Project.ProjectStatus> getAllStatus() {
+        return Arrays.asList(Project.ProjectStatus.values());
     }
 
 }
